@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\CommunityController;
+use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\api\TokenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\PostController as PostV1;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +18,18 @@ use App\Http\Controllers\Api\V1\PostController as PostV1;
 |
 */
 
-Route::apiResource('v1/post', PostV1::class)
-      ->only(['index','show', 'destroy'])
-      ->middleware('auth:sanctum');
-      
-Route::post('login', [App\Http\Controllers\Api\LoginController::class, 'login']);
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+
+Route::apiResource('communities', CommunityController::class)->only(['index','show']);
+Route::apiResource('posts', PostController::class)->only(['index','show']);
+Route::apiResource('comments', CommentController::class)->only(['index','show']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('communities', CommunityController::class)->except(['index', 'show']);
+    Route::apiResource('posts', PostController::class)->except(['index', 'show']);
+    Route::apiResource('comments', CommentController::class)->except(['index', 'show']);
+});
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+Route::post('token', [TokenController::Class, 'createToken']);

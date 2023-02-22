@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Community>
  */
-class PostFactory extends Factory
+class CommunityFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,7 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'name'=>fake()->text('10'),
-            'content'=>fake()->sentence(),
+            'name'=>fake()->name(),
         ];
     }
 }

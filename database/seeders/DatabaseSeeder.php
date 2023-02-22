@@ -2,7 +2,11 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Comment;
+use App\Models\Community;
+use App\Models\Post;
+use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,13 +18,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(10)->create();
-        \App\Models\Post::factory(5)->create();
-
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $comunidad = Community::factory(3)->create();
+        foreach ($comunidad as $com){
+            $usuario = User::factory(2)->hasAttached($com)->create();
+            foreach ($usuario as $usr) {
+                Post::factory(2)->for($com)->for($usr)->has(Comment::factory(3)->for($usr)->count(3))->count(2)->create();
+            }
+        }
     }
 }
